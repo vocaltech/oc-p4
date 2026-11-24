@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,15 +17,39 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+    private static final String[] WHITE_LIST_URL = {
+            "/login",
+            "/api/auth/login",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/css/**"
+    };
+
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+
+        //
+        // src: https://docs.spring.io/spring-security/reference/servlet/architecture.html
+        //
         http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").hasRole("USER") // Secure the /delete endpoint
-                        .anyRequest().authenticated() // All other requests require authentication
+                //.csrf(AbstractHttpConfigurer::disable)
+                .csrf(Customizer.withDefaults())
+                // 'sessionManagement' configures Spring Security to not create
+                // or use an HTTP session for storing the authenticated security context.
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/auth/login")
+                        .permitAll()
                 )
-                .httpBasic(Customizer.withDefaults()) // Enable HTTP Basic Authentication
-                .csrf(AbstractHttpConfigurer::disable); // Disable CSRF for stateless API
+
+                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(WHITE_LIST_URL).permitAll()
+                        .anyRequest().authenticated()
+                );
 
         return http.build();
     }
