@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -28,7 +29,7 @@ class ProjectControllerTests {
     @Order(1)
     @WithMockUser(username = "user", roles = "USER")
     void shouldListProjects() throws Exception {
-        mockMvc.perform(get("/api/projects"))
+        mockMvc.perform(get("/api/demandes"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(2)));
@@ -39,9 +40,10 @@ class ProjectControllerTests {
     void shouldCreateProject() throws Exception {
         String payload = "{\"name\":\"Isolation double vitrage\",\"owner\":\"Sophie\",\"budget\":6000,\"description\":\"Travaux complémentaires\",\"impact\":\"Très bon\",\"status\":\"PLANNED\"}";
 
-        mockMvc.perform(post("/api/projects")
+        mockMvc.perform(post("/api/demandes")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(payload))
+                        .content(payload)
+                        .with(csrf()))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Isolation double vitrage"));
     }
