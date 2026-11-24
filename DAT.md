@@ -90,14 +90,14 @@ Transition alternative : depuis *En qualification* ou *Devis envoyé* → **Refu
 - **RG3** : seules les transitions de statut prévues par le workflow sont autorisées.
 - **RG4 (accès)** : un employé ne modifie que les demandes dont il est responsable ; un admin peut modifier et réassigner toutes les demandes.
 
-## 7. Contrats d'interface (API REST)
+## 7. <font color="orange">Contrats d'interface (API REST)</font>
 
 | Méthode | Endpoint | Accès | Corps / params | Réponses |
 | --- | --- | --- | --- | --- |
-| POST | /api/auth/login | public | {email, motDePasse} | 200 {token} ; 401 |
-| GET | /api/demandes | authentifié | ?statut= &type= | 200 [Demande] ; 401 |
-| POST | /api/demandes | authentifié | {clientId, description, type, …} | 201 Demande ; 400 ; 401 |
-| GET | /api/demandes/{id} | authentifié | — | 200 Demande ; 404 |
+| POST | <font color="orange">/api/auth/login</font> | <font color="orange">public</font> | {email, motDePasse} | 200 {token} ; 401 |
+| GET | <font color="orange">/api/demandes</font> | <font color="orange">authentifié</font> | ?statut= &type= | <font color="orange">200 [Demande] ; 401</font> |
+| POST | <font color="orange">/api/demandes</font> | <font color="orange">authentifié</font> | {clientId, description, type, …} | 201 Demande ; 400 ; 401 |
+| GET | <font color="orange">/api/demandes/{id}</font> | <font color="orange">authentifié</font> | — | 200 Demande ; 404 |
 | PUT | /api/demandes/{id} | responsable / admin | {statut?, description?, montantEstime?, …} | 200 ; 403 ; 404 |
 | GET | /api/clients | authentifié | — | 200 [Client] |
 | POST | /api/clients | authentifié | {nom, email, …} | 201 ; 400 |
@@ -108,7 +108,7 @@ Transition alternative : depuis *En qualification* ou *Devis envoyé* → **Refu
 
 Quatre écrans :
 
-- **Connexion** : formulaire email + mot de passe.
+- <font color="orange">**Connexion** : formulaire email + mot de passe.</font>
 - **Liste des demandes** : tableau (référence, client, type, statut, responsable) + filtres statut/type + bouton « Nouvelle demande ».
 - **Détail / édition d'une demande** : informations + changement de statut.
 - **Création d'une demande** : formulaire + sélection du client.
@@ -121,5 +121,5 @@ Quatre écrans :
 - `<label>` associé à chaque champ et messages d'erreur reliés aux champs ;
 - contrastes WCAG AA ;
 - focus clavier visible et navigation complète au clavier ;
-- aucune information transmise par la seule couleur.
+- <font color="red">**aucune information transmise par la seule couleur**</font>.
 </aside>
