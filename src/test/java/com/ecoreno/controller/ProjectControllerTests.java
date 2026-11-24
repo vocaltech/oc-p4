@@ -1,11 +1,12 @@
-package com.ecoreno;
+package com.ecoreno.controller;
 
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +26,7 @@ class ProjectControllerTests {
 
     @Test
     @Order(1)
+    @WithMockUser(username = "user", roles = "USER")
     void shouldListProjects() throws Exception {
         mockMvc.perform(get("/api/projects"))
                 .andExpect(status().isOk())
@@ -33,6 +35,7 @@ class ProjectControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "user", roles = "USER")
     void shouldCreateProject() throws Exception {
         String payload = "{\"name\":\"Isolation double vitrage\",\"owner\":\"Sophie\",\"budget\":6000,\"description\":\"Travaux complémentaires\",\"impact\":\"Très bon\",\"status\":\"PLANNED\"}";
 
