@@ -1,0 +1,26 @@
+@startuml
+skinparam state {
+  BackgroundColor <<initial>> LightYellow
+  BackgroundColor <<final>> LightPink
+}
+
+[*] --> Reçue
+
+state "Reçue" as R
+
+state "En qualification" as Q
+state "Devis envoyé" as D
+state "Planifiée" as P
+
+state "Terminée" as T <<final>>
+state "Refusée" as F <<final>>
+
+R --> Q : qualifier
+Q --> D : envoyer devis
+D --> P : planifier
+P --> T : terminer
+
+Q --> F : refuser
+D --> F : refuser
+
+@enduml
